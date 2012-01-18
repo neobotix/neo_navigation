@@ -1,0 +1,12 @@
+<stack>
+  <description brief="neo_navigation">neo_navigation</description>
+  <author>Maintained by mob</author>
+  <license>BSD</license>  
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/neo_navigation</url>
+  <depend stack="common_msgs" /> <!-- sensor_msgs, geometry_msgs -->
+  <depend stack="navigation" /> <!-- move_base -->
+  <depend stack="ros" />
+  <depend stack="ros_comm" /> <!-- std_msgs -->
+
+</stack>
