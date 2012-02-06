@@ -13,7 +13,7 @@
  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
     <param name="planner_frequency" value="0.5"/>
     <param name="recovery_behavior_enabled" value="true"/>
-    <param name="controller_frequency" value="15"/>
+    <param name="controller_frequency" value="10"/>
     <rosparam file="$(find neo_2dnav_mpo_500)/ros/launch/$(env ROBOT)_costmap_common.yaml" command="load" ns="global_costmap" />
     <rosparam file="$(find neo_2dnav_mpo_500)/ros/launch/$(env ROBOT)_costmap_common.yaml" command="load" ns="local_costmap" />
     <rosparam file="$(find neo_2dnav_mpo_500)/ros/launch/$(env ROBOT)_costmap_local.yaml" command="load" />
