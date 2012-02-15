@@ -47,7 +47,7 @@
 class MultiGoals
 {
 	public:
-	MultiGoals() : timeAtGoal(1), stuckTime(10) {};
+	MultiGoals() : timeAtGoal(3), stuckTime(10) {};
 	ros::NodeHandle n;
 	ros::Subscriber subs_path;
 	ros::Subscriber subs_wayPoint;
@@ -57,7 +57,8 @@ class MultiGoals
 	ros::Publisher pub_navGoal;
 	ros::Publisher pub_plan;
 	ros::Publisher pub_cmd_vel;
-	
+	ros::Publisher pub_deltaWay;
+
 	int init();
 	
 	void addWayPoint(const geometry_msgs::PoseStamped& pose);
@@ -80,8 +81,11 @@ class MultiGoals
 	bool reachedGoal;
 	bool stuck;
 	double dx, dy;
+	double lPoseX, lPoseY, deltaWay;
+	bool hasPose;
 	tf::TransformListener listener;
 	geometry_msgs::Twist twist;
+
 };
 
 int MultiGoals::init()
@@ -92,6 +96,8 @@ int MultiGoals::init()
 	activePlan = false;
 	reachedGoal = false;
 	stuck = false;
+	hasPose = false;
+	deltaWay = 0;
 	subs_clearWayPoints = n.subscribe("/clear_way_points",1,&MultiGoals::clearWayPoints, this);
 	subs_path = n.subscribe("/multi_goal_path",1,&MultiGoals::setPath, this);
 	subs_wayPoint = n.subscribe("/add_way_point",1,&MultiGoals::addWayPoint, this);
@@ -100,7 +106,7 @@ int MultiGoals::init()
 	pub_navGoal = n.advertise<geometry_msgs::PoseStamped>("/move_base_simple/goal",1);
 	pub_plan = n.advertise<nav_msgs::Path>("/get_multi_path",1);
 	pub_cmd_vel = n.advertise<geometry_msgs::Twist>("/cmd_vel",1);
-
+	pub_deltaWay = n.advertise<std_msgs::Float32>("deltaWay",1);
 	return 0;
 }
 
@@ -165,7 +171,7 @@ void MultiGoals::checkForNextGoal()
 {
 	if(activePlan)
 	{
-		if(dy * dy + dx * dx < 0.4 && twist.linear.x < 0.05 && twist.linear.y < 0.05 && twist.angular.z < 0.05) //close to goal and not moving
+		if(dy * dy + dx * dx < 0.4 && twist.linear.x < 0.005 && twist.linear.y < 0.005 && twist.angular.z < 0.005) //close to goal and not moving
 		{
 			if(reachedGoal)
 			{
@@ -187,7 +193,7 @@ void MultiGoals::checkForNextGoal()
 		else 
 		{
 			reachedGoal = false;
-			if(twist.linear.x < 0.05 && twist.linear.y < 0.05 && twist.angular.z < 0.05)
+			if(twist.linear.x < 0.005 && twist.linear.y < 0.005 && twist.angular.z < 0.005)
 			{	//stuck?
 				if(!stuck)
 				{
@@ -227,6 +233,23 @@ void MultiGoals::tfDeltaPose()
 	{
 		dx = transform.getOrigin().x() - path.poses[currentGoal].pose.position.x;
 		dy = transform.getOrigin().y() - path.poses[currentGoal].pose.position.y;
+		if(!hasPose)
+		{
+			lPoseX = transform.getOrigin().x();
+			lPoseY = transform.getOrigin().y();
+			hasPose = true;
+		}
+		else
+		{
+			double dx_ = transform.getOrigin().x() - lPoseX;
+			double dy_ = transform.getOrigin().y() - lPoseY;
+			deltaWay += sqrt( dx_ * dx_ + dy_ * dy_  );
+			std_msgs::Float32 dW;
+			dW.data = deltaWay;
+			pub_deltaWay.publish(dW);
+			lPoseX = transform.getOrigin().x();
+			lPoseY = transform.getOrigin().y();
+		}
 	}
 };
 
