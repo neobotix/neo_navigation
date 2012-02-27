@@ -2,7 +2,7 @@
 <node pkg="amcl" type="amcl" name="amcl">
   <!-- Publish scans from best pose at a max of 10 Hz -->
   <param name="odom_model_type" value="omni"/>
-  <param name="odom_alpha5" value="0.05"/>
+  <param name="odom_alpha5" value="0.2"/>
   <param name="transform_tolerance" value="0.2" />
   <param name="gui_publish_rate" value="10.0"/>
   <param name="laser_max_beams" value="30"/>
@@ -11,10 +11,10 @@
   <param name="kld_err" value="0.05"/>
   <param name="kld_z" value="0.99"/>
   <param name="odom_alpha1" value="0.4"/>
-  <param name="odom_alpha2" value="0.2"/>
+  <param name="odom_alpha2" value="0.4"/>
   <!-- translation std dev, m -->
-  <param name="odom_alpha3" value="0.2"/>
-  <param name="odom_alpha4" value="0.4"/>
+  <param name="odom_alpha3" value="0.4"/>
+  <param name="odom_alpha4" value="0.8"/>
   <param name="laser_z_hit" value="0.5"/>
   <param name="laser_z_short" value="0.05"/>
   <param name="laser_z_max" value="0.05"/>

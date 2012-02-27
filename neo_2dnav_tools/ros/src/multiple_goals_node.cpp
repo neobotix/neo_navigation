@@ -47,7 +47,7 @@
 class MultiGoals
 {
 	public:
-	MultiGoals() : timeAtGoal(3), stuckTime(10) {};
+	MultiGoals() : timeAtGoal(1), stuckTime(10) {};
 	ros::NodeHandle n;
 	ros::Subscriber subs_path;
 	ros::Subscriber subs_wayPoint;
@@ -77,6 +77,7 @@ class MultiGoals
 	ros::Duration timeAtGoal;
 	ros::Duration stuckTime;
 	int currentGoal;
+	int count;
 	bool activePlan;
 	bool reachedGoal;
 	bool stuck;
@@ -90,6 +91,7 @@ class MultiGoals
 
 int MultiGoals::init()
 {
+	count = 0;
 	path.header.frame_id="/map";
 	dy = 10000; dx = 10000;
 	currentGoal = 0;
@@ -123,6 +125,7 @@ void MultiGoals::addWayPoint(const geometry_msgs::PoseStamped& pose)
 
 void MultiGoals::clearWayPoints(const std_msgs::Empty& clear)
 {
+	activePlan = false;
 	path.poses.clear();
 	pub_plan.publish(path);	
 };
@@ -244,9 +247,14 @@ void MultiGoals::tfDeltaPose()
 			double dx_ = transform.getOrigin().x() - lPoseX;
 			double dy_ = transform.getOrigin().y() - lPoseY;
 			deltaWay += sqrt( dx_ * dx_ + dy_ * dy_  );
-			std_msgs::Float32 dW;
-			dW.data = deltaWay;
-			pub_deltaWay.publish(dW);
+			count++;
+			if(count > 100)
+			{
+				count = 0;
+				std_msgs::Float32 dW;
+				dW.data = deltaWay;
+				pub_deltaWay.publish(dW);
+			}
 			lPoseX = transform.getOrigin().x();
 			lPoseY = transform.getOrigin().y();
 		}
