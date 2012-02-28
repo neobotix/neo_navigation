@@ -1,14 +1,13 @@
 <launch>
 
-  <arg name="env_package" default="neo_maps" />
-  <arg name="env_map" default="neo_inoFa.yaml" />
+  <arg name="env_map" default="$(find neo_maps)/neo_inoFa.yaml" />
 
   <!--- Run AMCL -->
   <remap from="/scan" to="/scan_unified/scan" />
   <!--remap from="/scan" to="/sick_front/scan" /-->
   <include file="$(find neo_2dnav_mpo_500)/ros/launch/$(env ROBOT)_amcl_diff.launch" />
 
-  <node name="map_server" pkg="map_server" type="map_server" args="$(find neo_maps)/$(arg env_map)"/>
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg env_map)"/>
 
  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
     <param name="planner_frequency" value="0.5"/>
