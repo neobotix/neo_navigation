@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+
+
+<launch>
+  <arg name="env_map" default="$(find neo_maps)/maps/map_werkstatt2.yaml" />
+
+  <!--- Run AMCL -->
+  <remap from="/scan" to="/sick_s300/scan_filtered" />
+  <include file="$(find neo_2dnav)/ros/launch/amcl_launch_files/$(env ROBOT)_amcl.launch" />
+
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg env_map)"/>
+
+ <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <!--remap from="cmd_vel" to="/cmd_vel"/-->
+    <rosparam file="$(find neo_2dnav)/ros/costmaps/$(env ROBOT)/$(env ROBOT)_costmap_common.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find neo_2dnav)/ros/costmaps/$(env ROBOT)/$(env ROBOT)_costmap_common.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find neo_2dnav)/ros/costmaps/$(env ROBOT)/$(env ROBOT)_costmap_local.yaml" command="load" />
+    <rosparam file="$(find neo_2dnav)/ros/costmaps/$(env ROBOT)/$(env ROBOT)_costmap_global.yaml" command="load" />
+    <rosparam file="$(find neo_2dnav)/ros/costmaps/$(env ROBOT)/$(env ROBOT)_planer_local.yaml" command="load" />
+  </node>
+
+</launch>

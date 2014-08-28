@@ -1,5 +1,0 @@
-<launch>
-	<node pkg="gmapping" type="slam_gmapping" name="gmapping" output="screen">
-		<remap from="scan" to="/sick_s300/scan"/>
-	</node>
-</launch>

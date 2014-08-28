@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+
+
+<launch>
+
+  <!--- Run gmapping (map and transform: odom <-> map ) -->
+  <include file="$(find neo_2dnav_slam)/ros/launch/gmapping_launch_files/$(env ROBOT)_gmapping.launch" />
+
+ <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <rosparam file="$(find neo_2dnav_slam)/ros/costmaps/$(env ROBOT)/$(env ROBOT)_costmap_common.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find neo_2dnav_slam)/ros/costmaps/$(env ROBOT)/$(env ROBOT)_costmap_common.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find neo_2dnav_slam)/ros/costmaps/$(env ROBOT)/$(env ROBOT)_costmap_local.yaml" command="load" />
+    <rosparam file="$(find neo_2dnav_slam)/ros/costmaps/$(env ROBOT)/$(env ROBOT)_costmap_global.yaml" command="load" />
+    <rosparam file="$(find neo_2dnav_slam)/ros/costmaps/$(env ROBOT)/$(env ROBOT)_planer_local.yaml" command="load" />
+  </node>
+
+</launch>
