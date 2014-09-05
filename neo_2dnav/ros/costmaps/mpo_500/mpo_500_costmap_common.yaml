@@ -6,4 +6,4 @@ inflation_radius: 0.50
 
 observation_sources: laser_scanner
 
-laser_scanner: {sensor_frame: laserfront, data_type: LaserScan, topic: sick_s300_front/scan_filtered, marking: true, clearing: true}
+laser_scanner: {sensor_frame: base_link, data_type: LaserScan, topic: cob_scan_unifier/scan_unified, marking: true, clearing: true}
