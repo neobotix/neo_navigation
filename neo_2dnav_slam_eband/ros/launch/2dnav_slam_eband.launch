@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+
+
+<launch>
+
+  <!--- Run gmapping (map and transform: odom <-> map ) -->
+  <include file="$(find neo_2dnav_slam_eband)/ros/launch/gmapping_launch_files/$(env ROBOT)_gmapping.launch" />
+
+
+ <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <remap from="/odom" to="/odometry"/>
+    <!-- Use the eband local planner -->
+    <param name="base_local_planner" value="eband_local_planner/EBandPlannerROS" />
+    <!-- Include Costmaps -->
+    <rosparam file="$(find neo_2dnav_slam_eband)/ros/costmaps/$(env ROBOT)/$(env ROBOT)_costmap_common.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find neo_2dnav_slam_eband)/ros/costmaps/$(env ROBOT)/$(env ROBOT)_costmap_common.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find neo_2dnav_slam_eband)/ros/costmaps/$(env ROBOT)/$(env ROBOT)_costmap_local.yaml" command="load" />
+    <rosparam file="$(find neo_2dnav_slam_eband)/ros/costmaps/$(env ROBOT)/$(env ROBOT)_costmap_global.yaml" command="load" />
+    <rosparam file="$(find neo_2dnav_slam_eband)/ros/costmaps/$(env ROBOT)/$(env ROBOT)_planer_local_eband.yaml" command="load" />
+  </node>
+
+</launch>
