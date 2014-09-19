@@ -5,10 +5,7 @@
 
   <!--- Run gmapping (map and transform: odom <-> map ) -->
   <include file="$(find neo_2dnav_slam)/ros/launch/gmapping_launch_files/$(env ROBOT)_gmapping.launch" />
- <node pkg="cob_base_velocity_smoother" type="cob_base_velocity_smoother" name="cob_base_velocity_smoother">
-	<remap from="input" to="cmd_vel"/>
-	<remap from="output" to="cmd_vel_smooth"/>
- </node>
+
  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
     <remap from="/odom" to="/odometry"/>
     <rosparam file="$(find neo_2dnav_slam)/ros/costmaps/$(env ROBOT)/$(env ROBOT)_costmap_common.yaml" command="load" ns="global_costmap" />
