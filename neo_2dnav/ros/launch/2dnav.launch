@@ -12,6 +12,9 @@
 
  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
     <!--remap from="cmd_vel" to="/cmd_vel"/-->
+    <param name="base_local_planner" value="eband_local_planner/EBandPlannerROS"/>
+    <rosparam param="controller_frequency">10.0</rosparam>
+    <rosparam param="planner_frequency">0.5</rosparam>
     <rosparam file="$(find neo_2dnav)/ros/costmaps/$(env ROBOT)/$(env ROBOT)_costmap_common.yaml" command="load" ns="global_costmap" />
     <rosparam file="$(find neo_2dnav)/ros/costmaps/$(env ROBOT)/$(env ROBOT)_costmap_common.yaml" command="load" ns="local_costmap" />
     <rosparam file="$(find neo_2dnav)/ros/costmaps/$(env ROBOT)/$(env ROBOT)_costmap_local.yaml" command="load" />

@@ -12,5 +12,15 @@ TrajectoryPlannerROS:
 
   controller_frequency: 25
 
+EBandPlannerROS:
+  Ctrl_Rate: 20.0
+  differential_drive: true
+  max_acceleration: 0.2
+  max_vel_lin: 0.6
+  max_vel_th: 0.3
+  min_vel_lin: 0.1
+  min_vel_th: 0.0
+  xy_goal_tolerance: 0.1
+  yaw_goal_tolerance: 0.2
 
 
